@@ -1,7 +1,13 @@
 # Atividade 2
-Projeto Express CRUD completo de Usuário em memória.
-Seguir padrão MVC.
-Utilizar do express para gerar as rotas
+Os requisitos desta atividade são: 
+<tr>
+<li>Projeto Express CRUD completo de Usuário em memória.
+<li>Seguir padrão MVC.
+<li>Utilizar do express para gerar as rotas
+</tr>
 
-<h2>Dependencias</h2>
-![NPM Version](https://img.shields.io/npm/v/Express?style=flat-square&color=green)
+## Dependencias 
+![Static Badge](https://img.shields.io/badge/install_express-gree?style=flat-square&label=npm)<br>
+![Static Badge](https://img.shields.io/badge/install_request-gree?style=flat-square&label=npm)
+
+
