@@ -102,7 +102,7 @@ const deleteLetter = (req, res) => {
     }
     cartas.splice(index, 1)
 
-    res.send(cartas)
+    res.status(202).send(cartas)
    
    
 }
