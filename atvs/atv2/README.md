@@ -8,7 +8,7 @@ Os requisitos desta atividade são:
 
 ## Dependências 
 `node install express`<br><br>
-`node install request`
+`node install request`<br><br>
 `node install -D nodemon`
 
 ## Forma de execução
