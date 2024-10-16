@@ -1,111 +1,136 @@
-
+// Array de objetos que representa cartas com remetente, destinatário, conteúdo, assinatura e informações adicionais
 const cartas = [
-    // Item 1
+    // Carta 1
     {
-        id: 1,
-        remetente: {
+        id: 1, // ID único da carta
+        remetente: { // Dados do remetente
             endereco: "Rua Arnaldo José Berlino",
             estado: "PR",
             cidade: "Umuarama",
             cep: 87511074
         },
-        destinatario: {
+        destinatario: { // Dados do destinatário
             endereco: "Quadra 605 Norte Alameda 18",
             estado: "TO",
             cidade: "Palmas",
             cep: 77001756
         },
-        conteudo: {
+        conteudo: { // Conteúdo da carta
             assunto: "",
             texto: "",
-            
         },
-        assinatura: "assinatura",
-        data: new Date(2024, 10, 15),
-        selo: true,
-        metodoEnvio: "Carta Registrada",
-        codigoRastreio: "BR123456789SE"
-
+        assinatura: "assinatura", // Assinatura da carta
+        data: new Date(2024, 10, 15), // Data de envio da carta
+        selo: true, // Indica se a carta tem selo
+        metodoEnvio: "Carta Registrada", // Tipo de envio
+        codigoRastreio: "BR123456789SE" // Código de rastreamento
     },
-    //Iem 2
+    // Carta 2
     {
-        id: 2,
-        remetente: {
+        id: 2, // ID único da carta
+        remetente: { // Dados do remetente
             endereco: "Rua da Cioba",
             estado: "PB",
             cidade: "Cabedelo",
             cep: 58106022
         },
-        destinatario: {
+        destinatario: { // Dados do destinatário
             endereco: "Rua Teófilo Marinho",
             estado: "RO",
             cidade: "Porto Velho",
             cep: 76803838
         },
-        conteudo: {
+        conteudo: { // Conteúdo da carta
             assunto: "",
             texto: "",
-            
         },
-        assinatura: "assinatura",
-        data: new Date(2024, 8, 5),
-        selo: true,
-        metodoEnvio: "PAC",
-        codigoRastreio: "PA661572828BR"
-
+        assinatura: "assinatura", // Assinatura da carta
+        data: new Date(2024, 8, 5), // Data de envio da carta
+        selo: true, // Indica se a carta tem selo
+        metodoEnvio: "PAC", // Tipo de envio
+        codigoRastreio: "PA661572828BR" // Código de rastreamento
     }
 ]
 
+// Função para buscar todas as cartas
 const findAllLetters = (req, res) => {
-    res.send(cartas)
+    res.send(cartas) // Envia todas as cartas como resposta
 }
 
+// Função para buscar uma carta específica pelo ID
 const findLetter = (req, res) => {
-    const id = req.params.id
+    const id = req.params.id // Pega o ID da carta a partir dos parâmetros da requisição
 
-    let found = false
-    cartas.map(function(valor){
-        if (valor.id == id){
-            found = true
-            return res.send(valor)
+    let found = false // Variável para verificar se a carta foi encontrada
+    // Percorre o array de cartas
+    cartas.map(function(valor) {
+        if (valor.id == id) { // Verifica se o ID bate com o da carta
+            found = true // Marca como encontrada
+            return res.send(valor) // Envia a carta correspondente
         }
     })
-    if (!found){
-        res.status(404).send({message: "Not found"});
+    if (!found) { // Se a carta não foi encontrada
+        res.status(404).send({message: "Not found"}); // Envia uma resposta de erro 404
     }
-
 }
+
 const createLetter = (req, res) => {
     const letter = req.body
-   
 
     function checkLetter(letter) {
-        const requiredFields = ['id', 'endereco', 'remetente', 'destinatario', 'assinatura', 'selo', 'metodoEnvio', 'codigoRastreio']
+        const requiredFields = ['id', 'remetente', 'destinatario', 'conteudo', 'assinatura', 'selo', 'metodoEnvio', 'codigoRastreio']
+        const requiredChildren = [
+            {parent: 'remetente', fields: ['endereco', 'estado', 'cidade', 'cep']},
+            {parent: 'destinatario', fields: ['endereco', 'estado', 'cidade', 'cep'] },
+            {parent: 'conteudo', fields: ['assunto', 'texto']}
+        ]
+
         for (const field of requiredFields){
             if (!letter[field]){
-                return res.status(404).send({message: `O campo ${field} está vazio`})
+                // Retorna 'false' se a validação falhar
+                res.status(404).send({message: `O campo ${field} está vazio`})
+                return false
             }
         }
-    }
-    checkLetter(letter)
 
-    cartas.push(letter)
-    res.status(202).send(cartas)
+        for (const child of requiredChildren){
+            for (const field of child.fields){
+                if (!letter[child.parent][field]){
+                    // Retorna 'false' se a validação falhar
+                    res.status(404).send({message: `O campo ${child.parent}.${field} está vazio`})
+                    return false
+                }
+            }
+        }
+        // Retorna 'true' se a validação passar
+        return true
+    }
+
+    // Verifica se a carta é válida antes de continuar
+    if (!checkLetter(letter)) {
+        return; // Se a validação falhar, interrompe a execução da função
+    }
+
+    cartas.push(letter) // Adiciona a nova carta ao array
+    res.status(202).send(cartas) // Envia a lista de cartas atualizada como resposta
 }
+
+
+// Função para deletar uma carta pelo ID
 const deleteLetter = (req, res) => {
-    
-    const id = req.params.id
-    const index = cartas.findIndex((letter) => letter.id == id)
+    const id = req.params.id // Pega o ID da carta a ser deletada
 
-    if (index === -1) {
-        return res.status(404).send({ message: "Carta não encontrada" })
+    const index = cartas.findIndex((letter) => letter.id == id) // Encontra o índice da carta com o ID correspondente
+
+    if (index === -1) { // Se a carta não for encontrada
+        return res.status(404).send({ message: "Carta não encontrada" }) // Envia uma resposta de erro 404
     }
-    cartas.splice(index, 1)
 
-    res.status(202).send(cartas)
-   
-   
+    cartas.splice(index, 1) // Remove a carta do array
+    res.status(202).send(cartas) // Envia a lista de cartas atualizada
 }
+
+// Exporta as funções para serem usadas em outros módulos
 module.exports = {
     findAllLetters,
     findLetter,
