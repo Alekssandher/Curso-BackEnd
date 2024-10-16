@@ -1,13 +1,21 @@
 # Atividade 2
 Os requisitos desta atividade são: 
-<tr>
-<li>Projeto Express CRUD completo de Usuário em memória.
-<li>Seguir padrão MVC.
-<li>Utilizar do express para gerar as rotas
-</tr>
 
-## Dependencias 
-![Static Badge](https://img.shields.io/badge/install_express-gree?style=flat-square&label=npm)<br>
-![Static Badge](https://img.shields.io/badge/install_request-gree?style=flat-square&label=npm)
+* Projeto Express CRUD completo de Usuário em memória.
+* Seguir padrão MVC.
+* Utilizar do express para gerar as rotas
 
+
+## Dependências 
+`node install express`<br><br>
+`node install request`
+
+## Forma de execução
+
+* Instale o [Node Js](https://nodejs.org/pt).
+* Instale as dependências através dos comandos acima.
+* Certifique-se de que seu arquivo package.json contenha o a linha `"start": "node ./index.js"` no campo scripts.
+* Na pasta raiz execute o comando `npm run dev` para iniciar o servidor.
+* Para realizar as requisições get basta digitar o caminho do servidor `http://localhost:3000/` no navegador e começar a usar.
+* Para as requisições post terá de instalar o plugin [Thunder Client](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client) e estar realizando a requisição com ele.
 
